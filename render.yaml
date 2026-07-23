@@ -1,0 +1,49 @@
+services:
+  # 1. Spring Boot Backend Web Service
+  - type: web
+    name: outfit-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    region: singapore
+    plan: free
+    healthCheckPath: /api/public/videos
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: outfit-postgres
+          property: connectionString
+      - key: SPRING_JPA_DATABASE_PLATFORM
+        value: org.hibernate.dialect.PostgreSQLDialect
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  # 2. Next.js Frontend Web Service
+  - type: web
+    name: outfit-frontend
+    env: docker
+    dockerContext: ./frontend
+    dockerfilePath: ./frontend/Dockerfile
+    region: singapore
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        fromService:
+          type: web
+          name: outfit-backend
+          property: url
+          suffix: /api
+
+databases:
+  # 3. PostgreSQL Database
+  - name: outfit-postgres
+    databaseName: outfit_recommendation
+    user: outfit_user
+    region: singapore
+    plan: free
