@@ -34,11 +34,7 @@ services:
     plan: free
     envVars:
       - key: NEXT_PUBLIC_API_BASE_URL
-        fromService:
-          type: web
-          name: outfit-backend
-          property: url
-          suffix: /api
+        sync: false
 
 databases:
   # 3. PostgreSQL Database
