@@ -1,0 +1,9 @@
+com\outfit\recommendation\module\video\controller\AdminOutfitControllerTest.class
+com\outfit\recommendation\module\weather\controller\WeatherControllerTest.class
+com\outfit\recommendation\module\auth\controller\AuthControllerTest.class
+com\outfit\recommendation\module\weather\service\WeatherServiceTest.class
+com\outfit\recommendation\module\storage\controller\MediaUploadControllerTest.class
+com\outfit\recommendation\module\weather\util\SeasonDetectorTest.class
+com\outfit\recommendation\module\storage\service\CloudinaryStorageServiceTest.class
+com\outfit\recommendation\RecommendationPlatformApplicationTests.class
+com\outfit\recommendation\module\auth\service\AuthServiceTest.class

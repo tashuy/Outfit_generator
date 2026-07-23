@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: recommendation-platform
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+  
+  # Database configuration
+  datasource:
+    # Use H2 in-memory by default, can be overridden with environment variables for Postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:outfitdb;DB_CLOSE_DELAY=-1}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  
+  jpa:
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # H2 Web Console for easy debugging
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+
+  # Cache configuration (uses Redis caching)
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+# Application Specific Properties
+app:
+  jwt:
+    secret: ${JWT_SECRET:9a4f2c8d3b7a1e5f8g0h2i4j6k8l0m2n4o6p8q0r2s4t6u8v0w2x4y6z8a0b2c4d}
+    expiration-ms: 86400000 # 24 hours
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    api-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+  weather:
+    api-key: ${WEATHER_API_KEY:}
+
+weather:
+  provider: ${WEATHER_PROVIDER:openweather}
+  api-key: ${WEATHER_API_KEY:}
+  base-url: ${WEATHER_BASE_URL:https://api.openweathermap.org/data/2.5}
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:}
+  api-key: ${CLOUDINARY_API_KEY:}
+  api-secret: ${CLOUDINARY_API_SECRET:}
+
+server:
+  port: 8080
