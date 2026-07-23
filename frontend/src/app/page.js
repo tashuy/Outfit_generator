@@ -1,143 +1,248 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Sparkles, ArrowRight, ShieldCheck, ThermometerSun, Search, ShoppingBag, Play } from 'lucide-react';
+import { outfitService } from '@/services/outfitService';
+import { 
+  Video, 
+  MapPin, 
+  Tag, 
+  ShoppingBag, 
+  ArrowRight, 
+  Sparkles, 
+  Loader2, 
+  ExternalLink 
+} from 'lucide-react';
 
 export default function Home() {
-  const router = useRouter();
+  const [outfits, setOutfits] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadOutfits();
+  }, []);
+
+  const loadOutfits = async () => {
+    setLoading(true);
+    try {
+      const data = await outfitService.getAllOutfits();
+      setOutfits(data);
+    } catch (err) {
+      console.error('Failed to load outfits:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = [
-    { title: 'Date Night Look', occasion: 'Date', img: 'https://images.unsplash.com/photo-1516715094727-ec48be335d79?auto=format&fit=crop&w=600&q=80', desc: 'Sleek, romantic outfits to make a lasting impression.' },
-    { title: 'Goa Vacation', occasion: 'Vacation', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80', desc: 'Breezy linen shirts, floral skirts, and light fabrics for beaches.' },
-    { title: 'College Outfits', occasion: 'College', img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80', desc: 'Oversized tees, baggy jeans, and retro sneakers under budget.' },
-    { title: 'Job Interview', occasion: 'Interview', img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80', desc: 'Sharp, corporate formal wear to secure your dream role.' },
-    { title: 'Wedding Ceremonies', occasion: 'Wedding', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80', desc: 'Premium traditional sherwanis, Anarkalis, and rich accessories.' },
-    { title: 'Airport Look', occasion: 'Airport', img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80', desc: 'Ultra-comfortable hoodies, joggers, and slip-on trainers.' }
+    { title: 'Casual Wear', category: 'CASUAL', desc: 'Everyday comfortable outfits' },
+    { title: 'Beach & Vacation', category: 'BEACH', desc: 'Breezy linen shirts & floral dresses' },
+    { title: 'Party & Nightlife', category: 'PARTY', desc: 'Sleek, eye-catching evening wear' },
+    { title: 'Formal & Office', category: 'FORMAL', desc: 'Sharp corporate and interview attire' },
+    { title: 'College Style', category: 'COLLEGE', desc: 'Trendy streetwear & retro sneakers' },
+    { title: 'Traditional & Wedding', category: 'WEDDING', desc: 'Rich ethnic wear and ceremonies' }
   ];
 
-  const selectOccasionAndGo = (occasion) => {
-    router.push(`/generator?occasion=${encodeURIComponent(occasion)}`);
+  const popularLocations = ['Goa', 'Mumbai', 'Delhi', 'Manali', 'Jaipur', 'Bangalore'];
+
+  const getVideoUrl = (path) => {
+    if (!path || typeof path !== 'string') return '';
+    if (path.startsWith('http')) return path;
+    return `http://localhost:8080${path}`;
   };
 
   return (
-    <div className="relative isolate px-6 pt-10 lg:px-8 max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-6 py-10">
       {/* Hero Section */}
-      <div className="mx-auto max-w-3xl py-16 sm:py-24 text-center">
-        <div className="mb-6 flex justify-center">
-          <div className="relative rounded-full px-3 py-1 text-xs leading-6 text-slate-400 ring-1 ring-white/10 hover:ring-white/20 flex items-center space-x-1">
-            <Play className="h-4 w-4 text-indigo-400 fill-current" />
-            <span>As seen on YouTube! Direct outfit links attached.</span>
-          </div>
+      <div className="text-center py-12 max-w-3xl mx-auto space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Curated Creator Outfit Guides</span>
         </div>
-
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-white">
-          Dressed from head to toe, <span className="text-gradient">powered by AI</span>
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Discover Real Outfits & <span className="text-gradient">Shop Direct Links</span>
         </h1>
-        
-        <p className="mt-6 text-lg leading-8 text-slate-300">
-          Tell us where you are going, your budget, your preferred style, and location. 
-          We&apos;ll analyze the weather instantly and recommend 3 complete looks with direct marketplace purchase links.
+        <p className="text-slate-300 text-base sm:text-lg">
+          Browse authentic style video guides, explore location-specific looks, and buy verified products from top fashion marketplaces.
         </p>
-
-        <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Link
-            href="/generator"
-            className="flex items-center space-x-2 rounded-xl bg-gradient-primary px-6 py-3.5 text-sm font-bold text-white shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all hover:scale-[1.02]"
-          >
-            <Sparkles className="h-4 w-4" />
-            <span>Generate Outfit Now</span>
-          </Link>
-          <Link href="/search" className="text-sm font-semibold leading-6 text-slate-300 hover:text-white flex items-center space-x-1.5 transition-all">
-            <span>Browse Catalog</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
       </div>
 
-      {/* Features Showcase */}
-      <div className="mx-auto max-w-5xl py-12">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="rounded-xl bg-indigo-500/10 p-3 text-indigo-400 w-fit mb-4">
-              <ThermometerSun className="h-6 w-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Weather-Aware Suggestions</h3>
-            <p className="text-sm text-slate-400">
-              No heavy velvet in 40°C or white sneakers in heavy rain. We pull weather stats for your destination automatically.
-            </p>
-          </div>
-          
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="rounded-xl bg-violet-500/10 p-3 text-violet-400 w-fit mb-4">
-              <ShoppingBag className="h-6 w-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Catalog Match Ranking</h3>
-            <p className="text-sm text-slate-400">
-              Matches styling items to verified inventory on Ajio, Myntra, Savana, and Meesho ranked by rating and price.
-            </p>
-          </div>
-
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="rounded-xl bg-rose-500/10 p-3 text-rose-400 w-fit mb-4">
-              <ShieldCheck className="h-6 w-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Complete Looks Only</h3>
-            <p className="text-sm text-slate-400">
-              We styling you from tops and bottoms to sneakers, loaders, hats, and jewelry. Complete head-to-toe logic.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Trending Occasions Section */}
-      <div className="py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Where are you heading?
-          </h2>
-          <p className="mt-4 text-slate-400 max-w-xl mx-auto">
-            Choose an occasion below to quickly launch the outfit builder with styling parameters ready.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((cat) => (
-            <div 
-              key={cat.title} 
-              onClick={() => selectOccasionAndGo(cat.occasion)}
-              className="glass-card overflow-hidden rounded-2xl cursor-pointer group flex flex-col justify-between"
+      {/* Featured Locations Chips */}
+      <div className="mb-12">
+        <h2 className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-4 flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-rose-400" />
+          <span>Popular Destination Styles</span>
+        </h2>
+        <div className="flex flex-wrap gap-3">
+          {popularLocations.map((loc) => (
+            <Link
+              key={loc}
+              href={`/location/${encodeURIComponent(loc)}`}
+              className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-amber-500/50 hover:bg-slate-800 transition-all text-sm font-semibold flex items-center gap-2"
             >
-              <div className="relative h-48 w-full overflow-hidden">
-                <img 
-                  src={cat.img} 
-                  alt={cat.title} 
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-90 group-hover:brightness-100" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80" />
-                <div className="absolute bottom-4 left-4">
-                  <span className="inline-flex items-center rounded-md bg-indigo-500/20 border border-indigo-500/30 px-2 py-1 text-xs font-semibold text-indigo-300">
-                    {cat.occasion}
-                  </span>
-                </div>
-              </div>
-              <div className="p-5 flex-grow flex flex-col justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">
-                    {cat.title}
-                  </h3>
-                  <p className="text-sm text-slate-400 mb-4">
-                    {cat.desc}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-1 text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
-                  <span>Generate Look</span>
-                  <ArrowRight className="h-3 w-3" />
-                </div>
-              </div>
-            </div>
+              <MapPin className="w-3.5 h-3.5 text-rose-400" />
+              <span>{loc} Outfits</span>
+            </Link>
           ))}
         </div>
+      </div>
+
+      {/* Browse By Category Cards */}
+      <div className="mb-14">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
+            <Tag className="w-5 h-5 text-amber-400" />
+            <span>Browse Categories</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categories.map((cat) => (
+            <Link
+              key={cat.category}
+              href={`/category/${encodeURIComponent(cat.category)}`}
+              className="glass-card p-5 rounded-2xl border border-white/5 hover:border-amber-500/30 transition-all group flex flex-col justify-between"
+            >
+              <div>
+                <span className="inline-flex px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold mb-3">
+                  {cat.category}
+                </span>
+                <h3 className="text-lg font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">
+                  {cat.title}
+                </h3>
+                <p className="text-xs text-slate-400">{cat.desc}</p>
+              </div>
+              <div className="mt-4 flex items-center text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform">
+                <span>View Category Outfits</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Latest Outfits Catalog Grid */}
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-extrabold text-white flex items-center gap-2">
+            <Video className="w-6 h-6 text-amber-400" />
+            <span>Latest Uploaded Outfits</span>
+          </h2>
+          <span className="text-xs font-semibold text-slate-400">
+            {outfits.length} Published Outfits
+          </span>
+        </div>
+
+        {loading ? (
+          <div className="py-20 text-center flex flex-col items-center justify-center space-y-3">
+            <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
+            <p className="text-slate-400 text-sm">Loading uploaded outfits...</p>
+          </div>
+        ) : outfits.length === 0 ? (
+          <div className="py-16 text-center space-y-4 bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto">
+            <Video className="w-10 h-10 text-slate-600 mx-auto" />
+            <p className="text-slate-300 font-semibold text-base">
+              No outfits uploaded yet. Check back soon!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {outfits.map((outfit) => (
+              <div 
+                key={outfit.id} 
+                className="glass-card overflow-hidden rounded-2xl border border-white/5 hover:border-amber-500/30 transition-all flex flex-col justify-between group"
+              >
+                {/* Media Preview Player */}
+                <div className="relative aspect-[9/16] bg-black max-h-[380px] overflow-hidden">
+                  {outfit.mediaType === 'VIDEO' ? (
+                    <video
+                      src={getVideoUrl(outfit.mediaUrl || outfit.videoUrl)}
+                      controls
+                      preload="metadata"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={getVideoUrl(outfit.mediaUrl || outfit.videoUrl)}
+                      alt={outfit.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  )}
+
+                  {/* Badge Overlay */}
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">
+                    {(outfit.categories || []).map((cat, idx) => (
+                      <span key={idx} className="bg-slate-950/80 backdrop-blur-md border border-white/10 px-2 py-0.5 rounded-md text-[10px] font-bold text-amber-300">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Info & Purchase Links */}
+                <div className="p-4 flex-grow flex flex-col justify-between space-y-3">
+                  <div>
+                    <Link href={`/videos/${outfit.id}`}>
+                      <h3 className="font-bold text-white text-base hover:text-amber-400 transition-colors line-clamp-1">
+                        {outfit.title}
+                      </h3>
+                    </Link>
+                    {outfit.description && (
+                      <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                        {outfit.description}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Locations */}
+                  {(outfit.locations || []).length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {outfit.locations.map((loc, idx) => (
+                        <span key={idx} className="text-[11px] font-semibold text-slate-300 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-rose-400" />
+                          {loc}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Product Store Links */}
+                  {(outfit.products || []).length > 0 && (
+                    <div className="border-t border-white/5 pt-3 space-y-1.5">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                        <ShoppingBag className="w-3 h-3 text-amber-400" />
+                        Shop Products ({outfit.products.length})
+                      </span>
+                      <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
+                        {outfit.products.map((prod, pIdx) => (
+                          <a
+                            key={pIdx}
+                            href={prod.productUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between text-xs px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/30 text-slate-200 hover:text-amber-300 transition-colors"
+                          >
+                            <span className="truncate max-w-[160px] font-medium">{prod.productName}</span>
+                            <ExternalLink className="w-3 h-3 opacity-60" />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* View Details Link */}
+                  <Link
+                    href={`/videos/${outfit.id}`}
+                    className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-center text-xs font-bold text-amber-400 transition-colors flex items-center justify-center gap-1 mt-2"
+                  >
+                    <span>View Full Details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

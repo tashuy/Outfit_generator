@@ -48,11 +48,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive(link.href)
+                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive(link.href)
                       ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/20'
                       : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
-                  }`}
+                    }`}
                 >
                   {Icon && <Icon className="h-4 w-4" />}
                   <span>{link.name}</span>
@@ -117,11 +116,10 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center space-x-2 px-3 py-2.5 rounded-lg text-base font-medium transition-all ${
-                  isActive(link.href)
+                className={`flex items-center space-x-2 px-3 py-2.5 rounded-lg text-base font-medium transition-all ${isActive(link.href)
                     ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/20'
                     : 'text-slate-300 hover:text-white hover:bg-white/5'
-                }`}
+                  }`}
               >
                 {Icon && <Icon className="h-5 w-5" />}
                 <span>{link.name}</span>
