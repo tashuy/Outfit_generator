@@ -23,20 +23,19 @@ public class AdminInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         String adminEmail = "admin@outfit.com";
 
-        if (!userRepository.existsByEmail(adminEmail)) {
-            log.info("Admin user not found. Seeding default Admin user...");
-            User admin = User.builder()
-                    .email(adminEmail)
-                    .password(passwordEncoder.encode("admin123"))
-                    .name("Platform Admin")
-                    .role(Role.ADMIN)
-                    .enabled(true)
-                    .build();
+        User admin = userRepository.findByEmail(adminEmail)
+                .orElseGet(() -> User.builder()
+                        .email(adminEmail)
+                        .name("Platform Admin")
+                        .role(Role.ADMIN)
+                        .enabled(true)
+                        .build());
 
-            userRepository.save(admin);
-            log.info("Default Admin user created successfully: email={}", adminEmail);
-        } else {
-            log.info("Admin user already exists in database: email={}", adminEmail);
-        }
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole(Role.ADMIN);
+        admin.setEnabled(true);
+
+        userRepository.save(admin);
+        log.info("Default Admin user ensured/seeded successfully: email={}", adminEmail);
     }
 }
