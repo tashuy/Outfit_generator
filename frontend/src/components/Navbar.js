@@ -30,12 +30,17 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="rounded-xl bg-gradient-primary p-2 text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
+            <Link href="/" className="flex items-center space-x-2.5 group">
+              <div className="rounded-xl bg-gradient-to-br from-amber-500 via-indigo-600 to-violet-600 p-2 text-white shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
                 <Shirt className="h-5 w-5" />
               </div>
-              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-200 via-indigo-400 to-violet-300 bg-clip-text text-transparent group-hover:brightness-110 transition-all">
-                DressGen<span className="text-indigo-400">.AI</span>
+              <span className="text-2xl font-black tracking-wider group-hover:brightness-110 transition-all">
+                <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-300 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]">
+                  FIT
+                </span>
+                <span className="bg-gradient-to-r from-slate-100 via-indigo-200 to-violet-300 bg-clip-text text-transparent font-light tracking-tight ml-0.5">
+                  atlas
+                </span>
               </span>
             </Link>
           </div>

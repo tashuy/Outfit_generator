@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 import ClientInitializer from '@/components/ClientInitializer';
 
 export const metadata = {
-  title: 'DressGen.AI - Your AI Personal Stylist',
+  title: 'FITatlas - Your AI Personal Stylist',
   description: 'Tell us where you are going, your budget, and style preference—we will dress you from head to toe.',
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
             </div>
             <div className="md:order-1">
               <p className="text-xs text-slate-400">
-                &copy; {new Date().getFullYear()} DressGen.AI. Outfitting you from head to toe. Powered by Gemini.
+                &copy; {new Date().getFullYear()} FITatlas. Outfitting you from head to toe. Powered by Gemini.
               </p>
             </div>
           </div>
