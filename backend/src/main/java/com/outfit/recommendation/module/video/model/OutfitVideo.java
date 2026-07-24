@@ -63,6 +63,17 @@ public class OutfitVideo {
     @Builder.Default
     private List<OutfitProduct> products = new ArrayList<>();
 
+    public void setProducts(List<OutfitProduct> newProducts) {
+        if (this.products == null) {
+            this.products = new ArrayList<>();
+        } else {
+            this.products.clear();
+        }
+        if (newProducts != null) {
+            this.products.addAll(newProducts);
+        }
+    }
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

@@ -112,21 +112,19 @@ public class OutfitVideoService {
                 .user(user)
                 .build();
 
-        OutfitVideo savedOutfit = outfitVideoRepository.save(outfit);
-
         if (requestDto.getProducts() != null && !requestDto.getProducts().isEmpty()) {
-            List<OutfitProduct> products = new ArrayList<>();
             for (OutfitProductDto productDto : requestDto.getProducts()) {
                 OutfitProduct product = OutfitProduct.builder()
-                        .outfit(savedOutfit)
+                        .outfit(outfit)
                         .productName(productDto.getProductName())
                         .productUrl(productDto.getProductUrl())
                         .platform(productDto.getPlatform())
                         .build();
-                products.add(product);
+                outfit.getProducts().add(product);
             }
-            savedOutfit.setProducts(outfitProductRepository.saveAll(products));
         }
+
+        OutfitVideo savedOutfit = outfitVideoRepository.save(outfit);
 
         log.info("Created outfit successfully: id={}, title={}", savedOutfit.getId(), savedOutfit.getTitle());
         return toOutfitResponseDto(savedOutfit);
@@ -167,12 +165,10 @@ public class OutfitVideoService {
         outfit.setOccasion(requestDto.getOccasion());
         outfit.setStyle(requestDto.getStyle());
 
-        // Update product links (replace existing)
-        outfitProductRepository.deleteByOutfitId(id);
+        // Update product links (replace existing safely via orphanRemoval)
         outfit.getProducts().clear();
 
         if (requestDto.getProducts() != null && !requestDto.getProducts().isEmpty()) {
-            List<OutfitProduct> products = new ArrayList<>();
             for (OutfitProductDto productDto : requestDto.getProducts()) {
                 OutfitProduct product = OutfitProduct.builder()
                         .outfit(outfit)
@@ -180,9 +176,8 @@ public class OutfitVideoService {
                         .productUrl(productDto.getProductUrl())
                         .platform(productDto.getPlatform())
                         .build();
-                products.add(product);
+                outfit.getProducts().add(product);
             }
-            outfit.setProducts(outfitProductRepository.saveAll(products));
         }
 
         OutfitVideo updated = outfitVideoRepository.save(outfit);
