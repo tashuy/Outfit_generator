@@ -10,9 +10,11 @@ services:
     healthCheckPath: /api/public/videos
     envVars:
       - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: outfit-postgres
-          property: connectionString
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
       - key: SPRING_JPA_DATABASE_PLATFORM
         value: org.hibernate.dialect.PostgreSQLDialect
       - key: JWT_SECRET
@@ -35,11 +37,3 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_BASE_URL
         sync: false
-
-databases:
-  # 3. PostgreSQL Database
-  - name: outfit-postgres
-    databaseName: outfit_recommendation
-    user: outfit_user
-    region: singapore
-    plan: free
