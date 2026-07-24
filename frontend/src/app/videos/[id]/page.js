@@ -3,7 +3,6 @@
 import React, { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import outfitService from '../../../services/outfitService';
-import Navbar from '../../../components/Navbar';
 import {
   ArrowLeft,
   MapPin,
@@ -70,7 +69,6 @@ export default function PublicOutfitDetailPage({ params }) {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      <Navbar />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
         <div className="flex items-center justify-between">

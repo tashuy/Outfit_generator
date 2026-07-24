@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useAuthStore } from '../../../store/authStore';
 import outfitService from '../../../services/outfitService';
 import MediaUploader from '../../../components/MediaUploader';
-import Navbar from '../../../components/Navbar';
 import {
   ArrowLeft,
   Plus,
@@ -151,7 +150,6 @@ export default function AdminUploadOutfitPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      <Navbar />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 space-y-6">
         <div className="flex items-center justify-between">
