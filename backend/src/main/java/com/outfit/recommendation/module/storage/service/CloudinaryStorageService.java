@@ -27,6 +27,9 @@ public class CloudinaryStorageService implements StorageService {
     @Value("${cloudinary.api-key:}")
     private String apiKey;
 
+    @Value("${app.backend-url:http://localhost:8080}")
+    private String backendUrl;
+
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
     private static final long MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100 MB
 
@@ -65,7 +68,8 @@ public class CloudinaryStorageService implements StorageService {
         if (isMockMode()) {
             log.info("Cloudinary credentials not configured. Storing original user file locally: {}", originalFilename);
             String localPath = localStorageService.store(file);
-            String mediaUrl = "http://localhost:8080" + localPath;
+            String normalizedBackendUrl = backendUrl != null ? backendUrl.replaceAll("/+$", "") : "http://localhost:8080";
+            String mediaUrl = normalizedBackendUrl + localPath;
             String publicId = localPath.replace("/uploads/", "");
 
             return MediaUploadResponse.builder()

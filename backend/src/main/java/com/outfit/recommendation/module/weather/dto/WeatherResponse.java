@@ -22,5 +22,14 @@ public class WeatherResponse implements Serializable {
     private Double windSpeed;
     private String condition;
     private String season;
+    private Double rainProbability;
+    private String advice;
     private Boolean cached;
+
+    public String getAdvice() {
+        if (advice != null && !advice.trim().isEmpty()) {
+            return advice;
+        }
+        return "Dress comfortably for " + (season != null ? season : "current") + " weather conditions.";
+    }
 }

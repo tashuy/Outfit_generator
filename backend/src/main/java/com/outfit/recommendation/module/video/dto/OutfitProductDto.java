@@ -23,4 +23,6 @@ public class OutfitProductDto {
 
     @NotBlank(message = "Platform is required")
     private String platform;
+
+    private Long clickCount;
 }

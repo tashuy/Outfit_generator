@@ -7,7 +7,8 @@ import com.outfit.recommendation.module.recommendation.model.OutfitRecommendatio
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.outfit.recommendation.module.recommendation.dto.OutfitGenerationRequest;
-import com.outfit.recommendation.module.recommendation.dto.WeatherResponse;
+import com.outfit.recommendation.module.weather.dto.WeatherResponse;
+import com.outfit.recommendation.module.weather.service.WeatherService;
 import com.outfit.recommendation.shared.model.*;
 import com.outfit.recommendation.module.video.model.*;
 import com.outfit.recommendation.module.recommendation.model.*;

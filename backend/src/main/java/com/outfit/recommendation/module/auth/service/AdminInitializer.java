@@ -19,10 +19,14 @@ public class AdminInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @org.springframework.beans.factory.annotation.Value("${app.admin.email:admin@outfit.com}")
+    private String adminEmail;
+
+    @org.springframework.beans.factory.annotation.Value("${app.admin.password:admin123}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) throws Exception {
-        String adminEmail = "admin@outfit.com";
-
         User admin = userRepository.findByEmail(adminEmail)
                 .orElseGet(() -> User.builder()
                         .email(adminEmail)
@@ -31,7 +35,7 @@ public class AdminInitializer implements CommandLineRunner {
                         .enabled(true)
                         .build());
 
-        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setPassword(passwordEncoder.encode(adminPassword));
         admin.setRole(Role.ADMIN);
         admin.setEnabled(true);
 

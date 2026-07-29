@@ -3,6 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import outfitService from '../../../services/outfitService';
+import analyticsService from '../../../services/analyticsService';
 import {
   ArrowLeft,
   MapPin,
@@ -47,6 +48,17 @@ export default function PublicOutfitDetailPage({ params }) {
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleProductClick = async (e, prod) => {
+    e.preventDefault();
+    try {
+      const res = await analyticsService.trackProductClick(prod.id);
+      window.open(res?.productUrl || prod.productUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.error('Click tracking error:', err);
+      window.open(prod.productUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -113,6 +125,8 @@ export default function PublicOutfitDetailPage({ params }) {
                     src={outfit.mediaUrl}
                     controls
                     autoPlay
+                    muted
+                    playsInline
                     loop
                     className="w-full max-h-[600px] object-contain bg-black"
                   />
@@ -228,7 +242,8 @@ export default function PublicOutfitDetailPage({ params }) {
                           href={prod.productUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all flex-shrink-0"
+                          onClick={(e) => handleProductClick(e, prod)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all flex-shrink-0 cursor-pointer"
                         >
                           Shop Now
                           <ExternalLink className="w-3.5 h-3.5" />

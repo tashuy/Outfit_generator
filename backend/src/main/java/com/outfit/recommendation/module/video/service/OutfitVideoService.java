@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -84,14 +86,14 @@ public class OutfitVideoService {
             mediaType = requestDto.getMediaUrl().endsWith(".mp4") || requestDto.getMediaUrl().endsWith(".webm") || requestDto.getMediaUrl().endsWith(".mov") ? "VIDEO" : "IMAGE";
         }
 
-        List<String> categories = new ArrayList<>();
+        Set<String> categories = new HashSet<>();
         if (requestDto.getCategories() != null && !requestDto.getCategories().isEmpty()) {
             categories.addAll(requestDto.getCategories());
         } else if (requestDto.getCategory() != null && !requestDto.getCategory().trim().isEmpty()) {
             categories.add(requestDto.getCategory().trim());
         }
 
-        List<String> locations = new ArrayList<>();
+        Set<String> locations = new HashSet<>();
         if (requestDto.getLocations() != null && !requestDto.getLocations().isEmpty()) {
             locations.addAll(requestDto.getLocations());
         } else if (requestDto.getLocation() != null && !requestDto.getLocation().trim().isEmpty()) {
@@ -145,7 +147,7 @@ public class OutfitVideoService {
             outfit.setMediaType(requestDto.getMediaType().toUpperCase());
         }
         
-        List<String> categories = new ArrayList<>();
+        Set<String> categories = new HashSet<>();
         if (requestDto.getCategories() != null && !requestDto.getCategories().isEmpty()) {
             categories.addAll(requestDto.getCategories());
         } else if (requestDto.getCategory() != null && !requestDto.getCategory().trim().isEmpty()) {
@@ -153,7 +155,7 @@ public class OutfitVideoService {
         }
         outfit.setCategories(categories);
 
-        List<String> locations = new ArrayList<>();
+        Set<String> locations = new HashSet<>();
         if (requestDto.getLocations() != null && !requestDto.getLocations().isEmpty()) {
             locations.addAll(requestDto.getLocations());
         } else if (requestDto.getLocation() != null && !requestDto.getLocation().trim().isEmpty()) {
@@ -229,6 +231,7 @@ public class OutfitVideoService {
                             .productName(p.getProductName())
                             .productUrl(p.getProductUrl())
                             .platform(p.getPlatform())
+                            .clickCount(p.getClickCount() != null ? p.getClickCount() : 0L)
                             .build())
                     .collect(Collectors.toList());
         }
@@ -241,12 +244,13 @@ public class OutfitVideoService {
                 .publicId(outfit.getPublicId())
                 .mediaType(outfit.getMediaType())
                 .category(outfit.getCategory())
-                .categories(outfit.getCategories() != null ? outfit.getCategories() : new ArrayList<>())
+                .categories(outfit.getCategories() != null ? new ArrayList<>(outfit.getCategories()) : new ArrayList<>())
                 .isLocationSpecific(outfit.getIsLocationSpecific())
                 .location(outfit.getLocation())
-                .locations(outfit.getLocations() != null ? outfit.getLocations() : new ArrayList<>())
+                .locations(outfit.getLocations() != null ? new ArrayList<>(outfit.getLocations()) : new ArrayList<>())
                 .occasion(outfit.getOccasion())
                 .style(outfit.getStyle())
+                .viewCount(outfit.getViewCount() != null ? outfit.getViewCount() : 0L)
                 .createdAt(outfit.getCreatedAt())
                 .products(productDtos)
                 .build();

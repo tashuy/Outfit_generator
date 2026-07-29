@@ -32,6 +32,7 @@ public class OutfitResponseDto {
 
     private String occasion;
     private String style;
+    private Long viewCount;
     private LocalDateTime createdAt;
 
     @Builder.Default

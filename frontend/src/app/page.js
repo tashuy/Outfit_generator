@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { outfitService } from '@/services/outfitService';
+import analyticsService from '@/services/analyticsService';
 import { 
   Video, 
   MapPin, 
@@ -31,6 +32,21 @@ export default function Home() {
       console.error('Failed to load outfits:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleProductClick = async (e, prod) => {
+    e.preventDefault();
+    if (!prod?.id) {
+      if (prod?.productUrl) window.open(prod.productUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    try {
+      const res = await analyticsService.trackProductClick(prod.id);
+      window.open(res?.productUrl || prod.productUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.error('Click tracking error:', err);
+      window.open(prod.productUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -220,7 +236,8 @@ export default function Home() {
                             href={prod.productUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between text-xs px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/30 text-slate-200 hover:text-amber-300 transition-colors"
+                            onClick={(e) => handleProductClick(e, prod)}
+                            className="flex items-center justify-between text-xs px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/30 text-slate-200 hover:text-amber-300 transition-colors cursor-pointer"
                           >
                             <span className="truncate max-w-[160px] font-medium">{prod.productName}</span>
                             <ExternalLink className="w-3 h-3 opacity-60" />

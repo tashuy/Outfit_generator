@@ -3,7 +3,7 @@ package com.outfit.recommendation.module.recommendation.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.outfit.recommendation.module.recommendation.dto.OutfitGenerationRequest;
-import com.outfit.recommendation.module.recommendation.dto.WeatherResponse;
+import com.outfit.recommendation.module.weather.dto.WeatherResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

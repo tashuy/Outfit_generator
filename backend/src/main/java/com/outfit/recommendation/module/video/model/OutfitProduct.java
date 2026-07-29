@@ -33,11 +33,18 @@ public class OutfitProduct {
     @Column(nullable = false)
     private String platform;
 
+    @Column(name = "click_count", nullable = false)
+    @Builder.Default
+    private Long clickCount = 0L;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.clickCount == null) {
+            this.clickCount = 0L;
+        }
     }
 }

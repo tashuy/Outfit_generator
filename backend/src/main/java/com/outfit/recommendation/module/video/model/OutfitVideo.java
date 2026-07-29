@@ -6,7 +6,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -39,7 +41,7 @@ public class OutfitVideo {
     @CollectionTable(name = "outfit_categories", joinColumns = @JoinColumn(name = "outfit_id"))
     @Column(name = "category")
     @Builder.Default
-    private List<String> categories = new ArrayList<>();
+    private Set<String> categories = new HashSet<>();
 
     @Column(name = "is_location_specific", nullable = false)
     @Builder.Default
@@ -49,7 +51,7 @@ public class OutfitVideo {
     @CollectionTable(name = "outfit_locations", joinColumns = @JoinColumn(name = "outfit_id"))
     @Column(name = "location")
     @Builder.Default
-    private List<String> locations = new ArrayList<>();
+    private Set<String> locations = new HashSet<>();
 
     private String occasion;
 
@@ -74,12 +76,19 @@ public class OutfitVideo {
         }
     }
 
+    @Column(name = "view_count", nullable = false)
+    @Builder.Default
+    private Long viewCount = 0L;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.viewCount == null) {
+            this.viewCount = 0L;
+        }
         if (this.mediaType == null) {
             this.mediaType = "VIDEO";
         }
@@ -98,12 +107,12 @@ public class OutfitVideo {
     }
 
     public String getCategory() {
-        return (categories != null && !categories.isEmpty()) ? categories.get(0) : null;
+        return (categories != null && !categories.isEmpty()) ? categories.iterator().next() : null;
     }
 
     public void setCategory(String category) {
         if (this.categories == null) {
-            this.categories = new ArrayList<>();
+            this.categories = new HashSet<>();
         }
         this.categories.clear();
         if (category != null && !category.trim().isEmpty()) {
@@ -112,12 +121,12 @@ public class OutfitVideo {
     }
 
     public String getLocation() {
-        return (locations != null && !locations.isEmpty()) ? locations.get(0) : "";
+        return (locations != null && !locations.isEmpty()) ? locations.iterator().next() : "";
     }
 
     public void setLocation(String location) {
         if (this.locations == null) {
-            this.locations = new ArrayList<>();
+            this.locations = new HashSet<>();
         }
         this.locations.clear();
         if (location != null && !location.trim().isEmpty()) {

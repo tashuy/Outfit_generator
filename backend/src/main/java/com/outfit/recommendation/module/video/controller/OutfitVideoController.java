@@ -1,5 +1,6 @@
 package com.outfit.recommendation.module.video.controller;
 
+import com.outfit.recommendation.module.analytics.service.AnalyticsService;
 import com.outfit.recommendation.module.video.dto.OutfitResponseDto;
 import com.outfit.recommendation.module.video.model.OutfitVideo;
 import com.outfit.recommendation.module.video.service.OutfitVideoService;
@@ -19,6 +20,9 @@ public class OutfitVideoController {
     @Autowired
     private OutfitVideoService outfitVideoService;
 
+    @Autowired
+    private AnalyticsService analyticsService;
+
     // Public list/search endpoints
     @GetMapping("/public/videos")
     public ResponseEntity<List<OutfitResponseDto>> getAllOutfits() {
@@ -27,6 +31,7 @@ public class OutfitVideoController {
 
     @GetMapping("/public/videos/{id}")
     public ResponseEntity<OutfitResponseDto> getOutfitById(@PathVariable UUID id) {
+        analyticsService.recordOutfitView(id);
         return ResponseEntity.ok(outfitVideoService.getOutfitById(id));
     }
 
