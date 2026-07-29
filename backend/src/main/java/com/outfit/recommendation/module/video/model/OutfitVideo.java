@@ -76,7 +76,7 @@ public class OutfitVideo {
         }
     }
 
-    @Column(name = "view_count", nullable = false)
+    @Column(name = "view_count", columnDefinition = "BIGINT DEFAULT 0")
     @Builder.Default
     private Long viewCount = 0L;
 

@@ -33,7 +33,7 @@ public class OutfitProduct {
     @Column(nullable = false)
     private String platform;
 
-    @Column(name = "click_count", nullable = false)
+    @Column(name = "click_count", columnDefinition = "BIGINT DEFAULT 0")
     @Builder.Default
     private Long clickCount = 0L;
 
