@@ -1,7 +1,7 @@
 services:
   # 1. Spring Boot Backend Web Service
   - type: web
-    name: vyvora-backend
+    name: outfit-backend
     env: docker
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
@@ -30,7 +30,7 @@ services:
 
   # 2. Next.js Frontend Web Service
   - type: web
-    name: vyvora-frontend
+    name: outfit-frontend
     env: docker
     dockerContext: ./frontend
     dockerfilePath: ./frontend/Dockerfile
