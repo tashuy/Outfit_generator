@@ -30,7 +30,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: outfit-backend
+    container_name: vyvora-backend
     ports:
       - "8080:8080"
     environment:
@@ -60,7 +60,7 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_BASE_URL: http://localhost:8080/api
-    container_name: outfit-frontend
+    container_name: vyvora-frontend
     ports:
       - "3000:3000"
     environment:

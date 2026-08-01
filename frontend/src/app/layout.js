@@ -1,11 +1,19 @@
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import ClientInitializer from '@/components/ClientInitializer';
 import Script from 'next/script';
 
 export const metadata = {
-  title: 'FITatlas - Your AI Personal Stylist',
-  description: 'Tell us where you are going, your budget, and style preference—we will dress you from head to toe.',
+  title: 'Vyvora — Discover Your Next Look',
+  description: 'Discover curated outfits for every destination, occasion and style. Watch outfit videos and shop the complete look.',
+  keywords: ['fashion', 'outfits', 'travel outfits', 'vacation outfits', 'styling inspiration', 'Vyvora'],
+  openGraph: {
+    title: 'Vyvora — Discover Your Next Look',
+    description: 'Discover curated outfits for every destination, occasion and style. Watch outfit videos and shop the complete look.',
+    siteName: 'Vyvora',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -39,21 +47,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         
-        <footer className="glass-panel border-t border-white/5 py-8 mt-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center md:flex md:items-center md:justify-between">
-            <div className="flex justify-center space-x-6 md:order-2 mb-4 md:mb-0">
-              <span className="text-xs text-slate-500">Goa Trip</span>
-              <span className="text-xs text-slate-500">Date Night</span>
-              <span className="text-xs text-slate-500">Job Interviews</span>
-              <span className="text-xs text-slate-500">Weddings</span>
-            </div>
-            <div className="md:order-1">
-              <p className="text-xs text-slate-400">
-                &copy; {new Date().getFullYear()} FITatlas. Outfitting you from head to toe. Powered by Gemini.
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );

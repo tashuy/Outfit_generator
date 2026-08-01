@@ -36,10 +36,10 @@ export default function Navbar() {
               </div>
               <span className="text-2xl font-black tracking-wider group-hover:brightness-110 transition-all">
                 <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-300 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]">
-                  FIT
+                  Vy
                 </span>
-                <span className="bg-gradient-to-r from-slate-100 via-indigo-200 to-violet-300 bg-clip-text text-transparent font-light tracking-tight ml-0.5">
-                  atlas
+                <span className="bg-gradient-to-r from-slate-100 via-indigo-200 to-violet-300 bg-clip-text text-transparent font-medium tracking-tight">
+                  vora
                 </span>
               </span>
             </Link>
