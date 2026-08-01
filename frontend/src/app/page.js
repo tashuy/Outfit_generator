@@ -77,43 +77,59 @@ export default function Home() {
     }
   };
 
+  const matchLocation = (outfit, term) => {
+    if (!outfit) return false;
+    const target = term.toLowerCase();
+    const locList = Array.isArray(outfit.locations) ? outfit.locations : (outfit.location ? [outfit.location] : []);
+    return locList.some(l => {
+      if (!l) return false;
+      const clean = l.replace(/^[{}\[\]"']+|[{}\[\]"']+$/g, '').toLowerCase();
+      return clean.includes(target) || target.includes(clean);
+    });
+  };
+
+  const getOutfitCount = (locationName, defaultFallback) => {
+    const matches = outfits.filter(o => matchLocation(o, locationName));
+    return matches.length > 0 ? matches.length : defaultFallback;
+  };
+
   // Featured destinations list with cover images
   const featuredDestinations = [
     {
       name: 'Goa',
       icon: '🏖',
       image: 'https://images.unsplash.com/photo-1512343800234-840322ee969c?auto=format&fit=crop&w=800&q=80',
-      count: outfits.filter(o => (o.locations || []).some(l => l.toLowerCase().includes('goa'))).length || 14,
+      count: getOutfitCount('Goa', 14),
     },
     {
       name: 'Udaipur',
       icon: '🏰',
       image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80',
-      count: outfits.filter(o => (o.locations || []).some(l => l.toLowerCase().includes('udaipur'))).length || 18,
+      count: getOutfitCount('Udaipur', 18),
     },
     {
       name: 'Las Vegas',
       icon: '🎰',
       image: 'https://images.unsplash.com/photo-1506146332389-18140dc7b2fb?auto=format&fit=crop&w=800&q=80',
-      count: outfits.filter(o => (o.locations || []).some(l => l.toLowerCase().includes('las vegas'))).length || 12,
+      count: getOutfitCount('Las Vegas', 12),
     },
     {
       name: 'Bali',
       icon: '🌊',
       image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
-      count: outfits.filter(o => (o.locations || []).some(l => l.toLowerCase().includes('bali'))).length || 22,
+      count: getOutfitCount('Bali', 22),
     },
     {
       name: 'Paris',
       icon: '🗼',
       image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80',
-      count: outfits.filter(o => (o.locations || []).some(l => l.toLowerCase().includes('paris'))).length || 29,
+      count: getOutfitCount('Paris', 29),
     },
     {
       name: 'Dubai',
       icon: '🏙',
       image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
-      count: outfits.filter(o => (o.locations || []).some(l => l.toLowerCase().includes('dubai'))).length || 16,
+      count: getOutfitCount('Dubai', 16),
     },
   ];
 

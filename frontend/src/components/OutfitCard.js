@@ -29,6 +29,11 @@ export default function OutfitCard({ outfit, isHorizontal = false }) {
     }
   };
 
+  const cleanLocationName = (loc) => {
+    if (!loc || typeof loc !== 'string') return '';
+    return loc.replace(/^[{}\[\]"']+|[{}\[\]"']+$/g, '').trim();
+  };
+
   const viewsCount = outfit.views || outfit.viewCount || Math.floor((outfit.id * 17) % 450 + 120);
   const mediaSrc = getVideoUrl(outfit.mediaUrl || outfit.videoUrl);
   const products = outfit.products || [];
@@ -81,7 +86,7 @@ export default function OutfitCard({ outfit, isHorizontal = false }) {
               {locations.length > 0 ? (
                 <span className="flex items-center gap-1 text-rose-400 font-medium truncate max-w-[140px]">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span className="truncate">{locations[0]}</span>
+                  <span className="truncate">{cleanLocationName(locations[0])}</span>
                 </span>
               ) : (
                 <span className="text-slate-500">Global Look</span>
@@ -176,7 +181,7 @@ export default function OutfitCard({ outfit, isHorizontal = false }) {
           <div className="absolute bottom-3 left-3 pointer-events-none z-10">
             <span className="bg-slate-950/80 backdrop-blur-md border border-white/10 px-2.5 py-1 rounded-lg text-xs font-semibold text-white flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-rose-400" />
-              <span>{locations[0]}</span>
+              <span>{cleanLocationName(locations[0])}</span>
             </span>
           </div>
         )}

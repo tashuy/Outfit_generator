@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface OutfitVideoRepository extends JpaRepository<OutfitVideo, UUID> {
 
-    @Query("SELECT DISTINCT o FROM OutfitVideo o JOIN o.locations l WHERE LOWER(l) = LOWER(:location) ORDER BY o.createdAt DESC")
+    @Query("SELECT DISTINCT o FROM OutfitVideo o JOIN o.locations l WHERE LOWER(l) LIKE LOWER(CONCAT('%', :location, '%')) OR LOWER(:location) LIKE LOWER(CONCAT('%', l, '%')) ORDER BY o.createdAt DESC")
     List<OutfitVideo> findByLocationIgnoreCaseOrderByCreatedAtDesc(@Param("location") String location);
 
     @Query("SELECT DISTINCT o FROM OutfitVideo o JOIN o.categories c WHERE LOWER(c) = LOWER(:category) ORDER BY o.createdAt DESC")

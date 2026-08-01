@@ -64,10 +64,60 @@ public class OutfitVideoService {
     }
 
     public List<OutfitResponseDto> getOutfitsByLocation(String location) {
-        return outfitVideoRepository.findByLocationIgnoreCaseOrderByCreatedAtDesc(location)
+        if (location == null || location.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        String cleanedLocation = location.replaceAll("^[\\[\\{\\\"\\']+|[\\]\\}\\\"\\']+$", "").trim();
+        return outfitVideoRepository.findByLocationIgnoreCaseOrderByCreatedAtDesc(cleanedLocation)
                 .stream()
                 .map(this::toOutfitResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    private Set<String> parseAndCleanLocations(Set<String> inputLocations, String singleLocation) {
+        Set<String> result = new LinkedHashSet<>();
+        List<String> rawList = new ArrayList<>();
+        if (inputLocations != null) {
+            rawList.addAll(inputLocations);
+        }
+        if (singleLocation != null && !singleLocation.trim().isEmpty()) {
+            rawList.add(singleLocation);
+        }
+
+        for (String raw : rawList) {
+            if (raw == null) continue;
+            String cleaned = raw.replaceAll("^[\\[\\{\\\"\\']+|[\\]\\}\\\"\\']+$", "").trim();
+            if (cleaned.isEmpty()) continue;
+
+            result.add(cleaned);
+
+            if (cleaned.contains(",")) {
+                String[] parts = cleaned.split(",");
+                for (String part : parts) {
+                    String p = part.replaceAll("^[\\[\\{\\\"\\']+|[\\]\\}\\\"\\']+$", "").trim();
+                    if (!p.isEmpty()) {
+                        result.add(p);
+                    }
+                }
+            }
+
+            if (cleaned.contains("(") && cleaned.contains(")")) {
+                int start = cleaned.indexOf("(");
+                int end = cleaned.indexOf(")", start);
+                if (start < end) {
+                    String inside = cleaned.substring(start + 1, end).trim();
+                    if (inside.contains(",")) {
+                        for (String part : inside.split(",")) {
+                            String p = part.replaceAll("^[\\[\\{\\\"\\']+|[\\]\\}\\\"\\']+$", "").trim();
+                            if (!p.isEmpty()) result.add(p);
+                        }
+                    } else if (!inside.isEmpty()) {
+                        result.add(inside);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     @Transactional
@@ -93,12 +143,7 @@ public class OutfitVideoService {
             categories.add(requestDto.getCategory().trim());
         }
 
-        Set<String> locations = new HashSet<>();
-        if (requestDto.getLocations() != null && !requestDto.getLocations().isEmpty()) {
-            locations.addAll(requestDto.getLocations());
-        } else if (requestDto.getLocation() != null && !requestDto.getLocation().trim().isEmpty()) {
-            locations.add(requestDto.getLocation().trim());
-        }
+        Set<String> locations = parseAndCleanLocations(requestDto.getLocations(), requestDto.getLocation());
 
         OutfitVideo outfit = OutfitVideo.builder()
                 .title(requestDto.getTitle())
@@ -155,12 +200,7 @@ public class OutfitVideoService {
         }
         outfit.setCategories(categories);
 
-        Set<String> locations = new HashSet<>();
-        if (requestDto.getLocations() != null && !requestDto.getLocations().isEmpty()) {
-            locations.addAll(requestDto.getLocations());
-        } else if (requestDto.getLocation() != null && !requestDto.getLocation().trim().isEmpty()) {
-            locations.add(requestDto.getLocation().trim());
-        }
+        Set<String> locations = parseAndCleanLocations(requestDto.getLocations(), requestDto.getLocation());
         outfit.setLocations(locations);
 
         outfit.setIsLocationSpecific(requestDto.getIsLocationSpecific() != null ? requestDto.getIsLocationSpecific() : true);

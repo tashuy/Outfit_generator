@@ -28,13 +28,30 @@ export default function LocationOutfitsPage({ params }) {
   const loadLocationOutfits = async () => {
     setLoading(true);
     try {
-      const data = await outfitService.getOutfitsByLocation(locationParam);
+      let data = await outfitService.getOutfitsByLocation(locationParam);
+      if (!data || data.length === 0) {
+        const allOutfits = await outfitService.getAllOutfits();
+        const cleanParam = locationParam.replace(/^[{}\[\]"']+|[{}\[\]"']+$/g, '').toLowerCase();
+        data = (allOutfits || []).filter(o => {
+          const locs = Array.isArray(o.locations) ? o.locations : (o.location ? [o.location] : []);
+          return locs.some(l => {
+            if (!l) return false;
+            const cleanLoc = l.replace(/^[{}\[\]"']+|[{}\[\]"']+$/g, '').toLowerCase();
+            return cleanLoc.includes(cleanParam) || cleanParam.includes(cleanLoc);
+          });
+        });
+      }
       setOutfits(data || []);
     } catch (err) {
       console.error('Error fetching location outfits:', err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const cleanLocationName = (loc) => {
+    if (!loc || typeof loc !== 'string') return '';
+    return loc.replace(/^[{}\[\]"']+|[{}\[\]"']+$/g, '').trim();
   };
 
   return (
@@ -134,7 +151,7 @@ export default function LocationOutfitsPage({ params }) {
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white font-medium bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-800">
                     <span className="flex items-center gap-1 truncate">
                       <MapPin className="w-3.5 h-3.5 text-rose-400 flex-shrink-0" />
-                      {outfit.location}
+                      {cleanLocationName(outfit.location || (outfit.locations && outfit.locations[0]))}
                     </span>
                     {outfit.products?.length > 0 && (
                       <span className="flex items-center gap-1 text-amber-400 font-bold">
