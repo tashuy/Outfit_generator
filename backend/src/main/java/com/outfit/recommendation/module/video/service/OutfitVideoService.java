@@ -17,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -74,7 +77,7 @@ public class OutfitVideoService {
                 .collect(Collectors.toList());
     }
 
-    private Set<String> parseAndCleanLocations(Set<String> inputLocations, String singleLocation) {
+    private Set<String> parseAndCleanLocations(Collection<String> inputLocations, String singleLocation) {
         Set<String> result = new LinkedHashSet<>();
         List<String> rawList = new ArrayList<>();
         if (inputLocations != null) {
